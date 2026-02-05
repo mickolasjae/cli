@@ -1,0 +1,49 @@
+{
+  "name": "@butterfly-security/cli",
+  "version": "0.1.0",
+  "description": "Butterfly Security CLI - Okta backup and recovery from your terminal",
+  "main": "dist/index.js",
+  "bin": {
+    "butterfly": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "okta",
+    "backup",
+    "identity",
+    "iam",
+    "terraform",
+    "cli"
+  ],
+  "author": "Butterfly Security",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/butterfly-security/cli"
+  },
+  "homepage": "https://butterflysecurity.org",
+  "dependencies": {
+    "boxen": "^7.1.1",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.3",
+    "commander": "^11.1.0",
+    "conf": "^12.0.0",
+    "inquirer": "^9.2.12",
+    "open": "^11.0.0",
+    "ora": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
