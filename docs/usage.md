@@ -4,20 +4,19 @@ Complete reference for all Butterfly CLI commands and options.
 
 ## Authentication
 
-Before using Butterfly CLI, you need to authenticate with your API key.
+Butterfly CLI uses OAuth for secure, token-based authentication. No API keys required!
 
-### Login
+### Login (OAuth)
 
 ```bash
-# Interactive login
+# Interactive OAuth login
 butterfly login
 
-# Login with API key
-butterfly login --api-key YOUR_API_KEY
-
-# Login with environment variable
-export BUTTERFLY_API_KEY=your-api-key
-butterfly login
+# This will:
+# 1. Open your browser
+# 2. Authenticate with Butterfly Security
+# 3. Grant CLI access to your account
+# 4. Store secure credentials locally
 ```
 
 ### Logout

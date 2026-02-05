@@ -13,23 +13,18 @@ Configuration is stored in a JSON file at:
 
 ```json
 {
-  "apiKey": null,
+  "oauthToken": null,
   "apiUrl": "https://api.butterflysecurity.org",
   "defaultOrg": null,
   "selectedBackup": null
 }
 ```
 
+**Note:** OAuth tokens are managed securely by the CLI and are never stored in plain text.
+
 ## Environment Variables
 
 Override configuration using environment variables:
-
-### Required
-
-```bash
-# API authentication key
-export BUTTERFLY_API_KEY=sk_live_...
-```
 
 ### Optional
 
@@ -49,6 +44,8 @@ export NO_COLOR=1
 # Enable debug logging
 export DEBUG=butterfly:*
 ```
+
+**Note:** OAuth tokens are managed securely by the CLI and cannot be set via environment variables for security reasons.
 
 ## Configuration Commands
 
@@ -110,51 +107,35 @@ Or environment variable:
 export BUTTERFLY_API_URL=https://your-api.example.com
 ```
 
-### API Key Management
+### OAuth Token Management
 
-#### Generate API Key
+Butterfly CLI uses OAuth 2.0 for secure authentication. Tokens are managed automatically and securely.
 
-1. Log in to your Butterfly account
-2. Go to Settings > API Keys
-3. Click "Create API Key"
-4. Copy the key (shown only once)
+#### How OAuth Works
 
-#### Store API Key Safely
+1. Run `butterfly login`
+2. Browser opens to Butterfly Security login
+3. You authenticate with your account
+4. CLI receives secure OAuth token
+5. Token stored in encrypted local storage
+6. No API keys needed!
 
-**Option 1: Environment Variable**
+#### Token Security
 
-```bash
-# Add to ~/.bashrc or ~/.zshrc
-export BUTTERFLY_API_KEY=sk_live_...
+- **Encrypted Storage**: Tokens stored securely in your system keyring
+- **Automatic Refresh**: Tokens refresh automatically when needed
+- **No Sharing**: Tokens never leave your computer
+- **Auto-Revocation**: Logout immediately revokes access
 
-# Or load from secure storage
-eval "$(1password item get 'Butterfly API Key' --fields label=value --format=json | jq -r '.[] | "export \(.label | ascii_upcase)=\(.value)"')"
-```
-
-**Option 2: Configuration File**
-
-```bash
-butterfly config set apiKey sk_live_...
-```
-
-**Option 3: CI/CD Secrets**
-
-Store in platform-specific secret managers:
-
-- **GitHub**: `Settings > Secrets > New repository secret`
-- **GitLab**: `Settings > CI/CD > Variables`
-- **Jenkins**: `Credentials > System > Global credentials`
-
-#### Rotate API Key
+#### Revoke Access
 
 ```bash
-# Generate new key in account settings, then:
-butterfly config set apiKey sk_live_...
+# Logout (revokes token)
+butterfly logout
 
-# Verify new key works
-butterfly status
-
-# Delete old key from account settings
+# Verify you're logged out
+butterfly whoami
+# Returns: Not authenticated
 ```
 
 ## Organization Configuration

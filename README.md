@@ -24,8 +24,8 @@ Download pre-built binaries from the [releases page](https://github.com/butterfl
 ## Quick Start
 
 ```bash
-# Authenticate with your API key
-butterfly login --api-key YOUR_API_KEY
+# Authenticate with OAuth (opens browser)
+butterfly login
 
 # Check status of your Okta orgs
 butterfly status
@@ -54,8 +54,7 @@ butterfly export git
 ### Authentication
 
 ```bash
-butterfly login                    # Interactive login
-butterfly login --api-key KEY      # Login with API key
+butterfly login                    # OAuth login (opens browser)
 butterfly logout                   # Clear credentials
 butterfly whoami                   # Show current status
 ```
@@ -131,8 +130,10 @@ butterfly diff --json
 
 ## Environment Variables
 
-- `BUTTERFLY_API_KEY` - API key for authentication
 - `BUTTERFLY_API_URL` - Custom API URL (default: https://butterflysecurity.org)
+- `BUTTERFLY_DEFAULT_ORG` - Default organization ID
+
+OAuth tokens are managed securely by the CLI - no need to set them manually!
 
 ## Configuration File
 
@@ -140,12 +141,14 @@ Configuration is stored in `~/.config/butterfly-cli/config.json`:
 
 ```json
 {
-  "apiKey": "your-api-key",
+  "oauthToken": "(securely stored)",
   "apiUrl": "https://butterflysecurity.org",
   "defaultOrg": "your-okta-org",
   "selectedBackup": null
 }
 ```
+
+OAuth tokens are encrypted and managed automatically - you don't need to handle them.
 
 ## Examples
 

@@ -164,4 +164,4 @@ Update Node.js if needed: https://nodejs.org/
 
 ## Next Steps
 
-After installation, proceed with [Login & Authentication](usage.md#authentication).
+After installation, proceed with [OAuth Login & Authentication](usage.md#authentication).

@@ -12,8 +12,11 @@ Automated daily backups of your Okta configuration:
 #!/bin/bash
 # backup-daily.sh
 
-# Set API key
-export BUTTERFLY_API_KEY=sk_live_...
+# Verify authentication
+butterfly whoami || {
+  echo "Not authenticated. Run 'butterfly login' first."
+  exit 1
+}
 
 # Create backup and wait
 butterfly backup --wait
@@ -57,7 +60,7 @@ butterfly config show
 
 ### GitHub Actions Workflow
 
-Backup Okta configuration on push:
+Backup Okta configuration on push with OAuth:
 
 ```yaml
 name: Backup Okta Configuration
@@ -79,7 +82,8 @@ jobs:
 
       - name: Create Backup
         run: |
-          butterfly login --api-key ${{ secrets.BUTTERFLY_API_KEY }}
+          # Use OAuth token (obtained during setup)
+          butterfly login --oauth-token ${{ secrets.BUTTERFLY_OAUTH_TOKEN }}
           butterfly backup --wait
           butterfly export terraform --output ./terraform
 
@@ -94,6 +98,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+**Setup OAuth Token:**
+1. Run `butterfly login` locally
+2. Get token from: `butterfly config show`
+3. Add to GitHub Secrets as `BUTTERFLY_OAUTH_TOKEN`
+
 ### GitLab CI Pipeline
 
 ```yaml
@@ -101,7 +110,7 @@ backup_okta:
   image: node:20
   script:
     - npm install -g @butterfly-security/cli
-    - butterfly login --api-key $BUTTERFLY_API_KEY
+    - butterfly login --oauth-token $BUTTERFLY_OAUTH_TOKEN
     - butterfly backup --wait
     - butterfly export terraform --output ./terraform
   artifacts:
@@ -112,6 +121,8 @@ backup_okta:
     - main
 ```
 
+**Setup:** Add `BUTTERFLY_OAUTH_TOKEN` to GitLab CI/CD Variables
+
 ### Jenkins Pipeline
 
 ```groovy
@@ -119,7 +130,7 @@ pipeline {
     agent any
 
     environment {
-        BUTTERFLY_API_KEY = credentials('butterfly-api-key')
+        BUTTERFLY_OAUTH_TOKEN = credentials('butterfly-oauth-token')
     }
 
     stages {
@@ -132,7 +143,7 @@ pipeline {
         stage('Backup') {
             steps {
                 sh '''
-                    butterfly login --api-key $BUTTERFLY_API_KEY
+                    butterfly login --oauth-token $BUTTERFLY_OAUTH_TOKEN
                     butterfly backup --wait
                     butterfly export terraform --output ./terraform
                 '''
@@ -148,6 +159,8 @@ pipeline {
     }
 }
 ```
+
+**Setup:** Add `butterfly-oauth-token` to Jenkins Credentials
 
 ## Monitoring & Alerting
 
